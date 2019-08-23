@@ -1,57 +1,32 @@
 import React from 'react';
+import axios from 'axios';
 
 
-function Food({name,pic}){
-  return (
-    <div>
-    <h1>I like {name}</h1>
-    <img src={pic}></img>
-    </div>
-    )
+class App extends React.Component{
+  state={
+    isLoading:true,
+    movies : []
 
-}
-
-
-const foodILike = [
-  {
-    name: "김치",
-    image:
-      "http://aeriskitchen.com/wp-content/uploads/2008/09/kimchi_bokkeumbap_02-.jpg"
-  },
-  {
-    name: "삼겹살",
-    image:
-      "https://3.bp.blogspot.com/-hKwIBxIVcQw/WfsewX3fhJI/AAAAAAAAALk/yHxnxFXcfx4ZKSfHS_RQNKjw3bAC03AnACLcBGAs/s400/DSC07624.jpg"
-  },
-  {
-    name: "비빔밥",
-    image:
-      "http://cdn-image.myrecipes.com/sites/default/files/styles/4_3_horizontal_-_1200x900/public/image/recipes/ck/12/03/bibimbop-ck-x.jpg?itok=RoXlp6Xb"
-  },
-  {
-    name: "돈까스",
-    image:
-      "https://s3-media3.fl.yelpcdn.com/bphoto/7F9eTTQ_yxaWIRytAu5feA/ls.jpg"
-  },
-  {
-    name: "김밥",
-    image:
-      "http://cdn2.koreanbapsang.com/wp-content/uploads/2012/05/DSC_1238r-e1454170512295.jpg"
+  };
+  getMovies = async () =>{
+    const {data : {data :{movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json")
+    this.setState({movies:movies,isLoading:false})
+    
   }
-];
+  componentDidMount(){
+    
+    this.getMovies();
 
+  }
 
-
-function App() {
-  return (
-    <div>
-      {foodILike.map(v=>(
-        <Food name={v.name} pic={v.image} />
-      ))}
+  render(){
+    const {isLoading} = this.state
+    return (
       
-      
-    </div>
-  )
+      <div>{isLoading ? "Loading...":"We are ready"}</div>
+    )
+  }
 }
+
 
 export default App;
